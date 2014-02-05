@@ -219,6 +219,7 @@ xkb_keysym_t KeyboardEngineXKB::NormalizeKey(xkb_keysym_t keysym) {
         case XKB_KEY_KP_Subtract:
           return  OZONECHARCODE_MINUS;
         case XKB_KEY_KP_Decimal:
+        case XKB_KEY_period:
           return  OZONECHARCODE_PERIOD;
         case XKB_KEY_KP_Divide:
           return  OZONECHARCODE_DIVISION;
