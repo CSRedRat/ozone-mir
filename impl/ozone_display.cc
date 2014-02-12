@@ -65,6 +65,12 @@ const char* OzoneDisplay::DefaultDisplaySpec() {
 
 bool OzoneDisplay::InitializeHardware() {
   display_ = ozoneui::Display::GPUProcessDisplayInstance();
+
+  if (!event_converter_) {
+    event_converter_ = new RemoteEventDispatcher();
+    display_->StartProcessingEvents();
+  }
+
   bool initialized_hardware = display_->Initialized();
   if (initialized_hardware && !content::ChildProcess::current()) {
     // In the multi-process mode, DisplayChannel (in GPU process side) is in

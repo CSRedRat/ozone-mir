@@ -11,7 +11,17 @@
       'dependencies': [
         '<(DEPTH)/skia/skia.gyp:skia',
         '<(DEPTH)/base/third_party/dynamic_annotations/dynamic_annotations.gyp:dynamic_annotations',
-        'wayland/wayland.gyp:wayland_toolkit'
+      ],
+      'variables': { 'use_ozone_mir%' : 0, 'use_ozone_wayland%' : 1},
+      'conditions': [
+        ['use_ozone_mir==1', {            
+          'dependencies': [ 'mir/mir.gyp:mir_toolkit'
+          ],
+        }],
+        ['use_ozone_wayland==1', {
+          'dependencies': [ 'wayland/wayland.gyp:wayland_toolkit'
+          ],
+        }],          
       ],
       'include_dirs': [
         '..',
