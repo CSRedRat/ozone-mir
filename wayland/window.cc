@@ -54,7 +54,9 @@ void WaylandWindow::SetShellAttributes(ShellType type,
   }
 
   type_ = type;
-  shell_surface_->UpdateShellSurface(type_, shell_parent, x, y);
+
+  WaylandShellSurface *wl_parent = static_cast<WaylandShellSurface*>(shell_parent);
+  shell_surface_->UpdateShellSurface(type_, wl_parent, x, y);
 }
 
 void WaylandWindow::SetWindowTitle(const base::string16& title) {
@@ -94,9 +96,9 @@ void WaylandWindow::RealizeAcceleratedWidget() {
                             allocation_.height());
 }
 
-wl_egl_window* WaylandWindow::egl_window() const {
+intptr_t WaylandWindow::egl_window() {
   DCHECK(window_);
-  return window_->egl_window();
+  return reinterpret_cast<intptr_t>(window_->egl_window());
 }
 
 struct wl_surface* WaylandWindow::GetSurface() const {
@@ -116,6 +118,10 @@ void WaylandWindow::Resize(unsigned width, unsigned height) {
   WaylandDisplay* display = WaylandDisplay::GetInstance();
   DCHECK(display);
   display->FlushDisplay();
+}
+
+WaylandShellSurface* WaylandWindow::GetShellSurface() {
+    return shell_surface_;
 }
 
 }  // namespace ozonewayland

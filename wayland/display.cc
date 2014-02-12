@@ -11,6 +11,9 @@
 #include "ozone/wayland/input_device.h"
 #include "ozone/wayland/screen.h"
 #include "ozone/wayland/window.h"
+#include "ozone/wayland/egl/egl_window.h"
+
+#include <stdlib.h> // for setenv
 
 namespace ozonewayland {
 WaylandDisplay* WaylandDisplay::instance_ = NULL;
@@ -70,8 +73,8 @@ WaylandWindow* WaylandDisplay::CreateAcceleratedSurface(unsigned w) {
 }
 
 void WaylandDisplay::DestroyWindow(unsigned w) {
-  std::map<unsigned, WaylandWindow*>::const_iterator it = widget_map_.find(w);
-  WaylandWindow* widget = it == widget_map_.end() ? NULL : it->second;
+  std::map<unsigned, ozoneui::Window*>::const_iterator it = widget_map_.find(w);
+  WaylandWindow* widget = it == widget_map_.end() ? NULL : static_cast<WaylandWindow*>(it->second);
   DCHECK(widget);
   delete widget;
   widget_map_.erase(w);
@@ -189,7 +192,7 @@ void WaylandDisplay::SetWidgetAttributes(unsigned widget,
   case POPUP:
     DCHECK(parent_window);
     window->SetShellAttributes(WaylandWindow::POPUP,
-                               parent_window->ShellSurface(),
+                               parent_window->GetShellSurface(),
                                x,
                                y);
     break;
@@ -243,8 +246,8 @@ void WaylandDisplay::terminate() {
 }
 
 WaylandWindow* WaylandDisplay::GetWidget(unsigned w) {
-  std::map<unsigned, WaylandWindow*>::const_iterator it = widget_map_.find(w);
-  return it == widget_map_.end() ? NULL : it->second;
+  std::map<unsigned, ozoneui::Window*>::const_iterator it = widget_map_.find(w);
+  return it == widget_map_.end() ? NULL : static_cast<WaylandWindow*>(it->second);
 }
 
 
@@ -296,4 +299,32 @@ void WaylandDisplay::DisplayHandleOutputOnly(void *data,
   }
 }
 
+const int32* WaylandDisplay::GetEGLSurfaceProperties(const int32* desired_list) {
+  return EGLWindow::GetEGLConfigAttribs();
+}
+
 }  // namespace ozonewayland
+
+ozoneui::Display* ozoneui::Display::GPUProcessDisplayInstance() {
+  using namespace ozonewayland;
+  WaylandDisplay *global = WaylandDisplay::GetInstance();
+  if (global) {
+    return global;
+  } else {
+    return new ozonewayland::WaylandDisplay(ozonewayland::WaylandDisplay::RegisterAsNeeded);
+  }
+}
+
+gfx::Rect ozoneui::Display::LookAheadOutputGeometryHack() {
+  using namespace ozonewayland;
+  WaylandDisplay disp_(WaylandDisplay::RegisterOutputOnly);
+  while (disp_.PrimaryScreen()->Geometry().IsEmpty()) {
+    disp_.SyncDisplay();
+  }
+
+  return disp_.PrimaryScreen()->Geometry();
+}
+
+void ozoneui::Display::MesaEnsureEGLPlatformSelected() {
+  setenv("EGL_PLATFORM", "wayland", 0);
+}

@@ -12,6 +12,8 @@
 #include "ui/gfx/point.h"
 #include "ui/gfx/rect.h"
 
+#include "ozone/ui/egl/screen.h"
+
 struct wl_output;
 
 namespace ozonewayland {
@@ -20,7 +22,7 @@ class WaylandDisplay;
 
 // WaylandScreen objects keep track of the current outputs (screens/monitors)
 // that are available to the application.
-class WaylandScreen {
+class WaylandScreen : public ozoneui::Screen {
  public:
   WaylandScreen(WaylandDisplay* display, uint32_t id);
   ~WaylandScreen();
@@ -31,7 +33,7 @@ class WaylandScreen {
  private:
   // Callback functions that allows the display to initialize the screen's
   // position and available modes.
-  static void OutputHandleGeometry(void* data,
+ static void OutputHandleGeometry(void* data,
                                    wl_output* output,
                                    int32_t x,
                                    int32_t y,

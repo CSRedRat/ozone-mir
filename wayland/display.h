@@ -16,6 +16,7 @@
 
 #include "base/basictypes.h"
 #include "ozone/ui/events/window_state_change_handler.h"
+#include "ozone/ui/egl/display.h"
 
 namespace ozonewayland {
 
@@ -24,12 +25,10 @@ class WaylandInputDevice;
 class WaylandScreen;
 class WaylandWindow;
 
-typedef std::map<unsigned, WaylandWindow*> WindowMap;
-
 // WaylandDisplay is a wrapper around wl_display. Once we get a valid
 // wl_display, the Wayland server will send different events to register
 // the Wayland compositor, shell, screens, input devices, ...
-class WaylandDisplay : public WindowStateChangeHandler {
+class WaylandDisplay : public ozoneui::Display, public WindowStateChangeHandler {
  public:
   enum RegistrationType {
     RegisterAsNeeded,  // Handles all the required registrations.
@@ -38,6 +37,11 @@ class WaylandDisplay : public WindowStateChangeHandler {
 
   explicit WaylandDisplay(RegistrationType type);
   virtual ~WaylandDisplay();
+  
+  bool Initialized() const { return display_ != 0; }
+  intptr_t GetNativeDisplay() { return reinterpret_cast<intptr_t>(display_); }
+  
+  const int32* GetEGLSurfaceProperties(const int32* desired_list);
 
   // Ownership is not passed to the caller.
   static WaylandDisplay* GetInstance() { return instance_; }
@@ -60,7 +64,7 @@ class WaylandDisplay : public WindowStateChangeHandler {
   unsigned GetSerial() const { return serial_; }
   void SetSerial(unsigned serial) { serial_ = serial; }
 
-  const WindowMap& GetWindowList() const { return widget_map_; }
+  const ozoneui::WindowMap& GetWindowList() const { return widget_map_; }
 
   // Creates a WaylandWindow backed by EGL Window and maps it to w. This can be
   // useful for callers to track a particular surface. By default the type of
@@ -129,7 +133,7 @@ class WaylandDisplay : public WindowStateChangeHandler {
 
   std::list<WaylandScreen*> screen_list_;
   std::list<WaylandInputDevice*> input_list_;
-  WindowMap widget_map_;
+  ozoneui::WindowMap widget_map_;
   unsigned serial_;
   static WaylandDisplay* instance_;
   DISALLOW_COPY_AND_ASSIGN(WaylandDisplay);

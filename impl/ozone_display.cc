@@ -11,9 +11,12 @@
 #include "ozone/impl/ipc/display_channel_host.h"
 #include "ozone/ui/events/event_converter_in_process.h"
 #include "ozone/ui/events/remote_event_dispatcher.h"
-#include "ozone/wayland/display.h"
-#include "ozone/wayland/screen.h"
-#include "ozone/wayland/window.h"
+#include "ozone/ui/events/window_state_change_handler.h"
+
+#include "ozone/ui/egl/display.h"
+#include "ozone/ui/egl/screen.h"
+#include "ozone/ui/egl/window.h"
+
 
 namespace ozonewayland {
 
@@ -61,8 +64,8 @@ const char* OzoneDisplay::DefaultDisplaySpec() {
 }
 
 bool OzoneDisplay::InitializeHardware() {
-  display_ = new WaylandDisplay(WaylandDisplay::RegisterAsNeeded);
-  bool initialized_hardware = display_->display() ? true : false;
+  display_ = ozoneui::Display::GPUProcessDisplayInstance();
+  bool initialized_hardware = display_->Initialized();
   if (initialized_hardware && !content::ChildProcess::current()) {
     // In the multi-process mode, DisplayChannel (in GPU process side) is in
     // charge of establishing an IPC channel with DisplayChannelHost (in
@@ -83,7 +86,7 @@ void OzoneDisplay::ShutdownHardware() {
 }
 
 intptr_t OzoneDisplay::GetNativeDisplay() {
-  return (intptr_t)display_->display();
+  return display_->GetNativeDisplay();
 }
 
 gfx::Screen* OzoneDisplay::CreateDesktopScreen() {
@@ -135,7 +138,7 @@ gfx::AcceleratedWidget OzoneDisplay::RealizeAcceleratedWidget(
     display_->StartProcessingEvents();
   }
 
-  WaylandWindow* widget = GetWidget(w);
+  ozoneui::Window* widget = GetWidget(w);
   DCHECK(widget);
   widget->RealizeAcceleratedWidget();
   return (gfx::AcceleratedWidget)widget->egl_window();
@@ -153,11 +156,11 @@ void OzoneDisplay::DelayedInitialization(OzoneDisplay* display) {
   display->channel_->Register();
 }
 
-WaylandWindow* OzoneDisplay::GetWidget(gfx::AcceleratedWidget w) {
-  const std::map<unsigned, WaylandWindow*> widget_map =
+ozoneui::Window* OzoneDisplay::GetWidget(gfx::AcceleratedWidget w) {
+  const std::map<unsigned, ozoneui::Window*> widget_map =
       display_->GetWindowList();
 
-  std::map<unsigned, WaylandWindow*>::const_iterator it = widget_map.find(w);
+  std::map<unsigned, ozoneui::Window*>::const_iterator it = widget_map.find(w);
     return it == widget_map.end() ? NULL : it->second;
 }
 
@@ -199,14 +202,7 @@ void OzoneDisplay::Terminate() {
 // Chrome tasks after GPU process is created.
 //
 void OzoneDisplay::LookAheadOutputGeometry() {
-  DCHECK(desktop_screen_);
-  WaylandDisplay disp_(WaylandDisplay::RegisterOutputOnly);
-  CHECK(disp_.display()) << "Ozone: Wayland server connection not found.";
-
-  while (disp_.PrimaryScreen()->Geometry().IsEmpty())
-    disp_.SyncDisplay();
-
-  desktop_screen_->SetGeometry(disp_.PrimaryScreen()->Geometry());
+  desktop_screen_->SetGeometry(ozoneui::Display::LookAheadOutputGeometryHack());
 }
 
 }  // namespace ozonewayland

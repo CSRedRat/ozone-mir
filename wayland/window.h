@@ -11,6 +11,8 @@
 #include "base/strings/string16.h"
 #include "ui/gfx/rect.h"
 
+#include "ozone/ui/egl/window.h"
+
 namespace ozonewayland {
 
 class WaylandShellSurface;
@@ -19,7 +21,7 @@ struct wl_egl_window;
 
 typedef unsigned WaylandWindowId;
 
-class WaylandWindow {
+class WaylandWindow : public ozoneui::Window {
  public:
   enum ShellType {
     None,
@@ -46,13 +48,13 @@ class WaylandWindow {
 
   ShellType Type() const { return type_; }
   unsigned Handle() const { return handle_; }
-  WaylandShellSurface* ShellSurface() const { return shell_surface_; }
+  WaylandShellSurface* GetShellSurface();
 
   void RealizeAcceleratedWidget();
 
   // Returns pointer to egl window associated with the window.
   // The WaylandWindow object owns the pointer.
-  wl_egl_window* egl_window() const;
+  intptr_t egl_window();
   // Returns pointer to Wayland Surface associated with the window.
   struct wl_surface* GetSurface() const;
 

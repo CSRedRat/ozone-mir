@@ -12,14 +12,18 @@ namespace gfx {
 class Screen;
 }
 
+namespace ozoneui
+{
+class Display;
+class Window;
+}
+
 namespace ozonewayland {
 
 class DesktopScreenWayland;
 class EventConverterOzoneWayland;
 class OzoneDisplayChannel;
 class OzoneDisplayChannelHost;
-class WaylandDisplay;
-class WaylandWindow;
 
 class OzoneDisplay : public OutputChangeObserver {
  public:
@@ -43,14 +47,14 @@ class OzoneDisplay : public OutputChangeObserver {
   virtual void OnOutputSizeChanged(unsigned width, unsigned height) OVERRIDE;
 
  private:
-  WaylandWindow* GetWidget(gfx::AcceleratedWidget w);
+  ozoneui::Window* GetWidget(gfx::AcceleratedWidget w);
   void Terminate();
   void LookAheadOutputGeometry();
 
   static void DelayedInitialization(OzoneDisplay* display);
 
   DesktopScreenWayland* desktop_screen_;
-  WaylandDisplay* display_;
+  ozoneui::Display* display_;
   OzoneDisplayChannel* channel_;
   OzoneDisplayChannelHost* host_;
   EventConverterOzoneWayland* event_converter_;

@@ -9,7 +9,8 @@
 #include "base/native_library.h"
 #include "ozone/impl/ozone_display.h"
 #include "ozone/impl/vsync_provider_wayland.h"
-#include "ozone/wayland/egl/egl_window.h"
+#include "ozone/ui/egl/display.h"
+#include "ozone/ui/events/window_state_change_handler.h"
 
 namespace ozonewayland {
 
@@ -72,7 +73,8 @@ bool SurfaceFactoryWayland::LoadEGLGLES2Bindings(
   // first platform listed in --with-egl-platforms during compilation. Thus, we
   // ensure here that wayland is set as the native platform. However, we don't
   // override the EGL_PLATFORM value in case it has already been set.
-  setenv("EGL_PLATFORM", "wayland", 0);
+  ozoneui::Display::MesaEnsureEGLPlatformSelected();
+
   std::string error;
   base::NativeLibrary gles_library = base::LoadNativeLibrary(
     base::FilePath("libGLESv2.so.2"), &error);
@@ -136,7 +138,7 @@ bool SurfaceFactoryWayland::SchedulePageFlip(gfx::AcceleratedWidget w) {
 
 const int32*
 SurfaceFactoryWayland::GetEGLSurfaceProperties(const int32* desired_list) {
-  return EGLWindow::GetEGLConfigAttribs();
+  return ozoneui::Display::GPUProcessDisplayInstance()->GetEGLSurfaceProperties(desired_list);
 }
 
 }  // namespace ozonewayland

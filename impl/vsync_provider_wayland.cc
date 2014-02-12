@@ -8,7 +8,7 @@
 #include "base/message_loop/message_loop.h"
 #include "ozone/impl/ozone_display.h"
 #include "ozone/ui/events/window_state_change_handler.h"
-#include "ozone/wayland/display.h"
+#include "ozone/ui/egl/display.h"
 
 namespace ozonewayland {
 
@@ -20,7 +20,7 @@ WaylandSyncProvider::~WaylandSyncProvider() {
   // destroyed. Inform OzoneDisplay to release Wayland resources.
   WindowStateChangeHandler::GetInstance()->SetWidgetState(handle_,
                                                           DESTROYED);
-  WaylandDisplay::GetInstance()->FlushDisplay();
+  ozoneui::Display::GPUProcessDisplayInstance()->FlushDisplay();
 }
 
 void WaylandSyncProvider::GetVSyncParameters(
@@ -35,7 +35,7 @@ void WaylandSyncProvider::GetVSyncParameters(
 }
 
 void WaylandSyncProvider::ScheduleFlush() {
-  WaylandDisplay* native_display = WaylandDisplay::GetInstance();
+  ozoneui::Display* native_display = ozoneui::Display::GPUProcessDisplayInstance();
   if (native_display)
     native_display->FlushDisplay();
 }
