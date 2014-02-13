@@ -206,7 +206,7 @@ void om::MirWindow::HandleEvent(MirSurface *surface, MirEvent const *ev, void *c
     MirKeyEvent const& kev = ev->key;
     // TODO: Translate modifiers ~racarr
     ui::EventType type = kev.action == mir_key_action_down ? ui::ET_KEY_PRESSED : ui::ET_KEY_RELEASED;
-    sink->KeyNotify(type, static_cast<xkb_keysym_t>(ev->key.key_code),
+    sink->KeyNotify(type, ozonewayland::KeyboardEngineXKB::NormalizeKey(static_cast<xkb_keysym_t>(ev->key.key_code)), 
                     TranslateMirModifiers(ev->key.modifiers));
   }
   break;

@@ -25,13 +25,14 @@ class KeyboardEngineXKB {
   bool IgnoreKeyNotify(unsigned hardwarecode, bool pressed);
 
   uint32_t GetKeyBoardModifiers() const { return keyboard_modifiers_; }
+  
+  static xkb_keysym_t NormalizeKey(xkb_keysym_t keysym);
 
  private:
   void InitXKB();
   void FiniXKB();
   bool IsSpecialModifier(unsigned hardwarecode);
   bool IsOnlyCapsLocked() const;
-  void NormalizeKey();
 
   // Keeps track of the currently active keyboard modifiers. We keep this
   // since we want to advertise keyboard modifiers with mouse events.

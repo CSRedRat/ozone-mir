@@ -105,8 +105,7 @@ unsigned KeyboardEngineXKB::ConvertKeyCodeFromEvdev(unsigned hardwarecode) {
     sym = XKB_KEY_NoSymbol;
 
   last_key_ = hardwarecode;
-  cached_sym_ = sym;
-  NormalizeKey();
+  cached_sym_ = NormalizeKey(cached_sym_);
 
   return cached_sym_;
 }
@@ -174,353 +173,253 @@ bool KeyboardEngineXKB::IsOnlyCapsLocked() const {
   return true;
 }
 
-void KeyboardEngineXKB::NormalizeKey() {
-  if ((cached_sym_ >= XKB_KEY_A && cached_sym_ <= XKB_KEY_Z) ||
-       (cached_sym_ >= XKB_KEY_a && cached_sym_ <= XKB_KEY_z) ||
-         (cached_sym_ >= XKB_KEY_0 && cached_sym_ <= XKB_KEY_9))
-    return;
+xkb_keysym_t KeyboardEngineXKB::NormalizeKey(xkb_keysym_t keysym) {
+  if ((keysym >= XKB_KEY_A && keysym <= XKB_KEY_Z) ||
+       (keysym >= XKB_KEY_a && keysym <= XKB_KEY_z) ||
+         (keysym >= XKB_KEY_0 && keysym <= XKB_KEY_9))
+    return keysym;
 
-  if (cached_sym_ >= XKB_KEY_KP_0 && cached_sym_ <= XKB_KEY_KP_9) {
+  if (keysym >= XKB_KEY_KP_0 && keysym <= XKB_KEY_KP_9) {
     // Numpad Number-keys can be represented by a keysym value of 0-9 nos.
-    cached_sym_ = XKB_KEY_0 + (cached_sym_ - XKB_KEY_KP_0);
-  } else if (cached_sym_ > 0x01000100 && cached_sym_ < 0x01ffffff) {
+    return  XKB_KEY_0 + (keysym - XKB_KEY_KP_0);
+  } else if (keysym > 0x01000100 && keysym < 0x01ffffff) {
     // Any UCS character in this range will simply be the character's
     // Unicode number plus 0x01000000.
-    cached_sym_ = cached_sym_ - 0x001000000;
-  } else if (cached_sym_ >= XKB_KEY_F1 && cached_sym_ <= XKB_KEY_F24) {
-    cached_sym_ = OZONEACTIONKEY_F1 + (cached_sym_ - XKB_KEY_F1);
-  } else if (cached_sym_ >= XKB_KEY_KP_F1 && cached_sym_ <= XKB_KEY_KP_F4) {
-      cached_sym_ = OZONEACTIONKEY_F1 + (cached_sym_ - XKB_KEY_KP_F1);
+    return  keysym - 0x001000000;
+  } else if (keysym >= XKB_KEY_F1 && keysym <= XKB_KEY_F24) {
+    return  OZONEACTIONKEY_F1 + (keysym - XKB_KEY_F1);
+  } else if (keysym >= XKB_KEY_KP_F1 && keysym <= XKB_KEY_KP_F4) {
+      return  OZONEACTIONKEY_F1 + (keysym - XKB_KEY_KP_F1);
   } else {
-      switch (cached_sym_) {
+      switch (keysym) {
         case XKB_KEY_dead_circumflex:
-          cached_sym_ = OZONECHARCODE_CARET_CIRCUMFLEX;
-          break;
+          return  OZONECHARCODE_CARET_CIRCUMFLEX;
         case XKB_KEY_dead_diaeresis:
-          cached_sym_ = OZONECHARCODE_SPACING_DIAERESIS;
-          break;
+          return  OZONECHARCODE_SPACING_DIAERESIS;
         case XKB_KEY_dead_perispomeni:
-          cached_sym_ = OZONECHARCODE_TILDE;
-          break;
+          return  OZONECHARCODE_TILDE;
         case XKB_KEY_dead_acute:
-          cached_sym_ = OZONECHARCODE_SPACING_ACUTE;
-          break;
+          return  OZONECHARCODE_SPACING_ACUTE;
         case XKB_KEY_dead_grave:
-          cached_sym_ = OZONECHARCODE_GRAVE_ASSCENT;
-          break;
+          return  OZONECHARCODE_GRAVE_ASSCENT;
         case XKB_KEY_endash:
-          cached_sym_ = OZONECHARCODE_ENDASH;
-          break;
+          return  OZONECHARCODE_ENDASH;
         case XKB_KEY_singlelowquotemark:
-          cached_sym_ = OZONECHARCODE_SINGLE_LOW_QUOTATION_MARK;
-          break;
+          return  OZONECHARCODE_SINGLE_LOW_QUOTATION_MARK;
         case XKB_KEY_dead_cedilla:
-          cached_sym_ = OZONECHARCODE_SPACING_CEDILLA;
-          break;
+          return  OZONECHARCODE_SPACING_CEDILLA;
         case XKB_KEY_KP_Equal:
-          cached_sym_ = OZONECHARCODE_EQUAL;
-          break;
+          return  OZONECHARCODE_EQUAL;
         case XKB_KEY_KP_Multiply:
-          cached_sym_ = OZONECHARCODE_MULTIPLY;
-          break;
+          return  OZONECHARCODE_MULTIPLY;
         case XKB_KEY_KP_Add:
-          cached_sym_ = OZONECHARCODE_PLUS;
-          break;
+          return  OZONECHARCODE_PLUS;
         case XKB_KEY_KP_Separator:
-          cached_sym_ = OZONECHARCODE_COMMA;
-          break;
+          return  OZONECHARCODE_COMMA;
         case XKB_KEY_KP_Subtract:
-          cached_sym_ = OZONECHARCODE_MINUS;
-          break;
+          return  OZONECHARCODE_MINUS;
         case XKB_KEY_KP_Decimal:
-          cached_sym_ = OZONECHARCODE_PERIOD;
-          break;
+          return  OZONECHARCODE_PERIOD;
         case XKB_KEY_KP_Divide:
-          cached_sym_ = OZONECHARCODE_DIVISION;
-          break;
+          return  OZONECHARCODE_DIVISION;
         case XKB_KEY_Delete:
         case XKB_KEY_KP_Delete:
-          cached_sym_ = OZONEACTIONKEY_DELETE;
-          break;
+          return  OZONEACTIONKEY_DELETE;
         case XKB_KEY_KP_Tab:
         case XKB_KEY_ISO_Left_Tab:
         case XKB_KEY_Tab:
         case XKB_KEY_3270_BackTab:
-          cached_sym_ = OZONEACTIONKEY_TAB;
-          break;
+          return  OZONEACTIONKEY_TAB;
         case XKB_KEY_Sys_Req:
         case XKB_KEY_Escape:
-          cached_sym_ = OZONEACTIONKEY_ESCAPE;
-          break;
+          return  OZONEACTIONKEY_ESCAPE;
         case XKB_KEY_Linefeed:
-          cached_sym_ = OZONECHARCODE_LINEFEED;
-          break;
+          return  OZONECHARCODE_LINEFEED;
         case XKB_KEY_Return:
         case XKB_KEY_KP_Enter:
         case XKB_KEY_ISO_Enter:
-          cached_sym_ = OZONEACTIONKEY_RETURN;
-          break;
+          return  OZONEACTIONKEY_RETURN;
         case XKB_KEY_KP_Space:
         case XKB_KEY_space:
-          cached_sym_ = OZONEACTIONKEY_SPACE;
-          break;
+          return  OZONEACTIONKEY_SPACE;
         case XKB_KEY_dead_caron:
-          cached_sym_ = OZONECHARCODE_CARON;
-          break;
+          return  OZONECHARCODE_CARON;
         case XKB_KEY_BackSpace:
-          cached_sym_ = OZONEACTIONKEY_BACK;
-          break;
+          return  OZONEACTIONKEY_BACK;
         case XKB_KEY_dead_doubleacute:
-          cached_sym_ = OZONECHARCODE_DOUBLE_ACUTE_ACCENT;
-          break;
+          return  OZONECHARCODE_DOUBLE_ACUTE_ACCENT;
         case XKB_KEY_dead_horn:
-          cached_sym_ = OZONECHARCODE_COMBINING_HORN;
-          break;
+          return  OZONECHARCODE_COMBINING_HORN;
         case XKB_KEY_oe:
-          cached_sym_ = OZONECHARCODE_LSMALL_OE;
-          break;
+          return  OZONECHARCODE_LSMALL_OE;
         case XKB_KEY_OE:
-          cached_sym_ = OZONECHARCODE_LOE;
-          break;
+          return  OZONECHARCODE_LOE;
         case XKB_KEY_idotless:
-          cached_sym_ = OZONECHARCODE_LSMALL_DOT_LESS_I;
-          break;
+          return  OZONECHARCODE_LSMALL_DOT_LESS_I;
         case XKB_KEY_kra:
-          cached_sym_ = OZONECHARCODE_LSMALL_KRA;
-          break;
+          return  OZONECHARCODE_LSMALL_KRA;
         case XKB_KEY_dead_stroke:
-          cached_sym_ = OZONECHARCODE_MINUS;
-          break;
+          return  OZONECHARCODE_MINUS;
         case XKB_KEY_eng:
-          cached_sym_ = OZONECHARCODE_LSMALL_ENG;
-          break;
+          return  OZONECHARCODE_LSMALL_ENG;
         case XKB_KEY_ENG:
-          cached_sym_ = OZONECHARCODE_LENG;
-          break;
+          return  OZONECHARCODE_LENG;
         case XKB_KEY_leftsinglequotemark:
-          cached_sym_ = OZONECHARCODE_LEFT_SINGLE_QUOTATION_MARK;
-          break;
+          return  OZONECHARCODE_LEFT_SINGLE_QUOTATION_MARK;
         case XKB_KEY_rightsinglequotemark:
-          cached_sym_ = OZONECHARCODE_RIGHT_SINGLE_QUOTATION_MARK;
-          break;
+          return  OZONECHARCODE_RIGHT_SINGLE_QUOTATION_MARK;
         case XKB_KEY_dead_belowdot:
-          cached_sym_ = OZONECHARCODE_COMBINING_DOT_BELOW;
-          break;
+          return  OZONECHARCODE_COMBINING_DOT_BELOW;
         case XKB_KEY_dead_belowdiaeresis:
-          cached_sym_ = OZONECHARCODE_COMBINING_DIAERESIS_BELOW;
-          break;
+          return  OZONECHARCODE_COMBINING_DIAERESIS_BELOW;
         case XKB_KEY_Clear:
         case XKB_KEY_KP_Begin:
-          cached_sym_ = OZONEACTIONKEY_CLEAR;
-          break;
+          return  OZONEACTIONKEY_CLEAR;
         case XKB_KEY_Home:
         case XKB_KEY_KP_Home:
-          cached_sym_ = OZONEACTIONKEY_HOME;
-          break;
+          return  OZONEACTIONKEY_HOME;
         case XKB_KEY_End:
         case XKB_KEY_KP_End:
-          cached_sym_ = OZONEACTIONKEY_END;
-          break;
+          return  OZONEACTIONKEY_END;
         case XKB_KEY_Page_Up:
         case XKB_KEY_KP_Page_Up:  // aka XKB_KEY_KP_Prior
-          cached_sym_ = OZONEACTIONKEY_PRIOR;
-          break;
+          return  OZONEACTIONKEY_PRIOR;
         case XKB_KEY_Page_Down:
         case XKB_KEY_KP_Page_Down:  // aka XKB_KEY_KP_Next
-          cached_sym_ = OZONEACTIONKEY_NEXT;
-          break;
+          return  OZONEACTIONKEY_NEXT;
         case XKB_KEY_Left:
         case XKB_KEY_KP_Left:
-          cached_sym_ = OZONEACTIONKEY_LEFT;
-          break;
+          return  OZONEACTIONKEY_LEFT;
         case XKB_KEY_Right:
         case XKB_KEY_KP_Right:
-          cached_sym_ = OZONEACTIONKEY_RIGHT;
-          break;
+          return  OZONEACTIONKEY_RIGHT;
         case XKB_KEY_Down:
         case XKB_KEY_KP_Down:
-          cached_sym_ = OZONEACTIONKEY_DOWN;
-          break;
+          return  OZONEACTIONKEY_DOWN;
         case XKB_KEY_Up:
         case XKB_KEY_KP_Up:
-          cached_sym_ = OZONEACTIONKEY_UP;
-          break;
+          return  OZONEACTIONKEY_UP;
         case XKB_KEY_Kana_Lock:
         case XKB_KEY_Kana_Shift:
-          cached_sym_ = OZONEACTIONKEY_KANA;
-          break;
+          return  OZONEACTIONKEY_KANA;
         case XKB_KEY_Hangul:
-          cached_sym_ = OZONEACTIONKEY_HANGUL;
-          break;
+          return  OZONEACTIONKEY_HANGUL;
         case XKB_KEY_Hangul_Hanja:
-          cached_sym_ = OZONEACTIONKEY_HANJA;
-          break;
+          return  OZONEACTIONKEY_HANJA;
         case XKB_KEY_Kanji:
-          cached_sym_ = OZONEACTIONKEY_KANJI;
-          break;
+          return  OZONEACTIONKEY_KANJI;
         case XKB_KEY_Henkan:
-          cached_sym_ = OZONEACTIONKEY_CONVERT;
-          break;
+          return  OZONEACTIONKEY_CONVERT;
         case XKB_KEY_Muhenkan:
-          cached_sym_ = OZONEACTIONKEY_NONCONVERT;
-          break;
+          return  OZONEACTIONKEY_NONCONVERT;
         case XKB_KEY_Zenkaku_Hankaku:
-          cached_sym_ = OZONEACTIONKEY_DBE_DBCSCHAR;
-          break;
+          return  OZONEACTIONKEY_DBE_DBCSCHAR;
         case XKB_KEY_ISO_Level5_Shift:
-          cached_sym_ = OZONEACTIONKEY_OEM_8;
-          break;
+          return  OZONEACTIONKEY_OEM_8;
         case XKB_KEY_Shift_L:
         case XKB_KEY_Shift_R:
-          cached_sym_ = OZONEACTIONKEY_SHIFT;
-          break;
+          return  OZONEACTIONKEY_SHIFT;
         case XKB_KEY_Control_L:
         case XKB_KEY_Control_R:
-          cached_sym_ = OZONEACTIONKEY_CONTROL;
-          break;
+          return  OZONEACTIONKEY_CONTROL;
         case XKB_KEY_Meta_L:
         case XKB_KEY_Meta_R:
         case XKB_KEY_Alt_L:
         case XKB_KEY_Alt_R:
-          cached_sym_ = OZONEACTIONKEY_MENU;
-          break;
+          return  OZONEACTIONKEY_MENU;
         case XKB_KEY_ISO_Level3_Shift:
-          cached_sym_ = OZONEACTIONKEY_ALTGR;
-          break;
+          return  OZONEACTIONKEY_ALTGR;
         case XKB_KEY_Multi_key:
-          cached_sym_ = OZONEACTIONKEY_COMPOSE;
-          break;
+          return  OZONEACTIONKEY_COMPOSE;
         case XKB_KEY_Pause:
-          cached_sym_ = OZONEACTIONKEY_PAUSE;
-          break;
+          return  OZONEACTIONKEY_PAUSE;
         case XKB_KEY_Caps_Lock:
-          cached_sym_ = OZONEACTIONKEY_CAPITAL;
-          break;
+          return  OZONEACTIONKEY_CAPITAL;
         case XKB_KEY_Num_Lock:
-          cached_sym_ = OZONEACTIONKEY_NUMLOCK;
-          break;
+          return  OZONEACTIONKEY_NUMLOCK;
         case XKB_KEY_Scroll_Lock:
-          cached_sym_ = OZONEACTIONKEY_SCROLL;
-          break;
+          return  OZONEACTIONKEY_SCROLL;
         case XKB_KEY_Select:
-          cached_sym_ = OZONEACTIONKEY_SELECT;
-          break;
+          return  OZONEACTIONKEY_SELECT;
         case XKB_KEY_Print:
-          cached_sym_ = OZONEACTIONKEY_PRINT;
-          break;
+          return  OZONEACTIONKEY_PRINT;
         case XKB_KEY_Execute:
-          cached_sym_ = OZONEACTIONKEY_EXECUTE;
-          break;
+          return  OZONEACTIONKEY_EXECUTE;
         case XKB_KEY_Insert:
         case XKB_KEY_KP_Insert:
-          cached_sym_ = OZONEACTIONKEY_INSERT;
-          break;
+          return  OZONEACTIONKEY_INSERT;
         case XKB_KEY_Help:
-          cached_sym_ = OZONEACTIONKEY_HELP;
-          break;
+          return  OZONEACTIONKEY_HELP;
         case XKB_KEY_Super_L:
-          cached_sym_ = OZONEACTIONKEY_LWIN;
-          break;
+          return  OZONEACTIONKEY_LWIN;
         case XKB_KEY_Super_R:
-          cached_sym_ = OZONEACTIONKEY_RWIN;
-          break;
+          return  OZONEACTIONKEY_RWIN;
         case XKB_KEY_Menu:
-          cached_sym_ = OZONEACTIONKEY_APPS;
-          break;
+          return  OZONEACTIONKEY_APPS;
         case XKB_KEY_XF86Tools:
-          cached_sym_ = OZONEACTIONKEY_F13;
-          break;
+          return  OZONEACTIONKEY_F13;
         case XKB_KEY_XF86Launch5:
-          cached_sym_ = OZONEACTIONKEY_F14;
-          break;
+          return  OZONEACTIONKEY_F14;
         case XKB_KEY_XF86Launch6:
-          cached_sym_ = OZONEACTIONKEY_F15;
-          break;
+          return  OZONEACTIONKEY_F15;
         case XKB_KEY_XF86Launch7:
-          cached_sym_ = OZONEACTIONKEY_F16;
-          break;
+          return  OZONEACTIONKEY_F16;
         case XKB_KEY_XF86Launch8:
-          cached_sym_ = OZONEACTIONKEY_F17;
-          break;
+          return  OZONEACTIONKEY_F17;
         case XKB_KEY_XF86Launch9:
-          cached_sym_ = OZONEACTIONKEY_F18;
-          break;
+          return  OZONEACTIONKEY_F18;
 
         // For supporting multimedia buttons on a USB keyboard.
         case XKB_KEY_XF86Back:
-          cached_sym_ = OZONEACTIONKEY_BROWSER_BACK;
-          break;
+          return  OZONEACTIONKEY_BROWSER_BACK;
         case XKB_KEY_XF86Forward:
-          cached_sym_ = OZONEACTIONKEY_BROWSER_FORWARD;
-          break;
+          return  OZONEACTIONKEY_BROWSER_FORWARD;
         case XKB_KEY_XF86Reload:
-          cached_sym_ = OZONEACTIONKEY_BROWSER_REFRESH;
-          break;
+          return  OZONEACTIONKEY_BROWSER_REFRESH;
         case XKB_KEY_XF86Stop:
-          cached_sym_ = OZONEACTIONKEY_BROWSER_STOP;
-          break;
+          return  OZONEACTIONKEY_BROWSER_STOP;
         case XKB_KEY_XF86Search:
-          cached_sym_ = OZONEACTIONKEY_BROWSER_SEARCH;
-          break;
+          return  OZONEACTIONKEY_BROWSER_SEARCH;
         case XKB_KEY_XF86Favorites:
-          cached_sym_ = OZONEACTIONKEY_BROWSER_FAVORITES;
-          break;
+          return  OZONEACTIONKEY_BROWSER_FAVORITES;
         case XKB_KEY_XF86HomePage:
-          cached_sym_ = OZONEACTIONKEY_BROWSER_HOME;
-          break;
+          return  OZONEACTIONKEY_BROWSER_HOME;
         case XKB_KEY_XF86AudioMute:
-          cached_sym_ = OZONEACTIONKEY_VOLUME_MUTE;
-          break;
+          return  OZONEACTIONKEY_VOLUME_MUTE;
         case XKB_KEY_XF86AudioLowerVolume:
-          cached_sym_ = OZONEACTIONKEY_VOLUME_DOWN;
-          break;
+          return  OZONEACTIONKEY_VOLUME_DOWN;
         case XKB_KEY_XF86AudioRaiseVolume:
-          cached_sym_ = OZONEACTIONKEY_VOLUME_UP;
-          break;
+          return  OZONEACTIONKEY_VOLUME_UP;
         case XKB_KEY_XF86AudioNext:
-          cached_sym_ = OZONEACTIONKEY_MEDIA_NEXT_TRACK;
-          break;
+          return  OZONEACTIONKEY_MEDIA_NEXT_TRACK;
         case XKB_KEY_XF86AudioPrev:
-          cached_sym_ = OZONEACTIONKEY_MEDIA_PREV_TRACK;
-          break;
+          return  OZONEACTIONKEY_MEDIA_PREV_TRACK;
         case XKB_KEY_XF86AudioStop:
-          cached_sym_ = OZONEACTIONKEY_MEDIA_STOP;
-          break;
+          return  OZONEACTIONKEY_MEDIA_STOP;
         case XKB_KEY_XF86AudioPlay:
-          cached_sym_ = OZONEACTIONKEY_MEDIA_PLAY_PAUSE;
-          break;
+          return  OZONEACTIONKEY_MEDIA_PLAY_PAUSE;
         case XKB_KEY_XF86Mail:
-          cached_sym_ = OZONEACTIONKEY_MEDIA_LAUNCH_MAIL;
-          break;
+          return  OZONEACTIONKEY_MEDIA_LAUNCH_MAIL;
         case XKB_KEY_XF86LaunchA:
-          cached_sym_ = OZONEACTIONKEY_MEDIA_LAUNCH_APP1;
-          break;
+          return  OZONEACTIONKEY_MEDIA_LAUNCH_APP1;
         case XKB_KEY_XF86LaunchB:
         case XKB_KEY_XF86Calculator:
-          cached_sym_ = OZONEACTIONKEY_MEDIA_LAUNCH_APP2;
-          break;
+          return  OZONEACTIONKEY_MEDIA_LAUNCH_APP2;
         case XKB_KEY_XF86WLAN:
-          cached_sym_ = OZONEACTIONKEY_WLAN;
-          break;
+          return  OZONEACTIONKEY_WLAN;
         case XKB_KEY_XF86PowerOff:
-          cached_sym_ = OZONEACTIONKEY_POWER;
-          break;
+          return  OZONEACTIONKEY_POWER;
         case XKB_KEY_XF86MonBrightnessDown:
-          cached_sym_ = OZONEACTIONKEY_BRIGHTNESS_DOWN;
-          break;
+          return  OZONEACTIONKEY_BRIGHTNESS_DOWN;
         case XKB_KEY_XF86MonBrightnessUp:
-          cached_sym_ = OZONEACTIONKEY_BRIGHTNESS_UP;
-          break;
+          return  OZONEACTIONKEY_BRIGHTNESS_UP;
         case XKB_KEY_XF86KbdBrightnessDown:
-          cached_sym_ = OZONEACTIONKEY_KBD_BRIGHTNESS_DOWN;
-          break;
+          return  OZONEACTIONKEY_KBD_BRIGHTNESS_DOWN;
         case XKB_KEY_XF86KbdBrightnessUp:
-          cached_sym_ = OZONEACTIONKEY_KBD_BRIGHTNESS_UP;
-          break;
+          return  OZONEACTIONKEY_KBD_BRIGHTNESS_UP;
         case XKB_KEY_emptyset:
         case XKB_KEY_NoSymbol:
-          cached_sym_ = OZONECHARCODE_NULL;
-          break;
+          return  OZONECHARCODE_NULL;
         default:
           break;
     }
