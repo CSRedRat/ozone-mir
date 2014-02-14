@@ -9,7 +9,7 @@
 #include "ozone/ui/events/event_converter_ozone_wayland.h"
 #include "ui/events/event.h"
 
-namespace ozonewayland {
+namespace ozoneui {
 
 class EventConverterInProcess : public EventConverterOzoneWayland {
   public:
@@ -62,6 +62,6 @@ class EventConverterInProcess : public EventConverterOzoneWayland {
   DISALLOW_COPY_AND_ASSIGN(EventConverterInProcess);
 };
 
-}  // namespace ozonewayland
+}  // namespace ozoneui
 
 #endif  // OZONE_UI_EVENTS_EVENT_CONVERTER_IN_PROCESS_H_

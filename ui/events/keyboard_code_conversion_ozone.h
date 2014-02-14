@@ -8,12 +8,12 @@
 #include "base/basictypes.h"
 #include "ozone/ui/events/keyboard_codes_ozone.h"
 
-namespace ozonewayland {
+namespace ozoneui {
 
   // A helper function to convert Ozone-WL types to ui::KeyboardCode type.
   ui::KeyboardCode KeyboardCodeFromNativeKeysym(unsigned key);
   uint16 CharacterCodeFromNativeKeySym(unsigned sym, unsigned flags);
 
-}  // namespace ozonewayland
+}  // namespace ozoneui
 
 #endif  // OZONE_UI_EVENTS_KEYBOARD_CODE_CONVERSION_OZONE_H_

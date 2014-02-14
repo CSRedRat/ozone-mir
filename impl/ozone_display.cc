@@ -67,7 +67,7 @@ bool OzoneDisplay::InitializeHardware() {
   display_ = ozoneui::Display::GPUProcessDisplayInstance();
 
   if (!event_converter_) {
-    event_converter_ = new RemoteEventDispatcher();
+    event_converter_ = new ozoneui::RemoteEventDispatcher();
     display_->StartProcessingEvents();
   }
 
@@ -114,7 +114,7 @@ gfx::AcceleratedWidget OzoneDisplay::GetAcceleratedWidget() {
   static int opaque_handle = 0;
   // Ensure Event Converter is initialized.
   if (!event_converter_) {
-    event_converter_ = new EventConverterInProcess();
+    event_converter_ = new ozoneui::EventConverterInProcess();
     event_converter_->SetOutputChangeObserver(this);
 
     if (display_) {
@@ -126,10 +126,10 @@ gfx::AcceleratedWidget OzoneDisplay::GetAcceleratedWidget() {
   }
 
   opaque_handle++;
-  WindowStateChangeHandler::GetInstance()->SetWidgetState(opaque_handle,
-                                                          CREATE,
-                                                          0,
-                                                          0);
+  ozoneui::WindowStateChangeHandler::GetInstance()->SetWidgetState(opaque_handle,
+                                                                   ozoneui::CREATE,
+                                                                   0,
+                                                                   0);
 
   return (gfx::AcceleratedWidget)opaque_handle;
 }
@@ -140,7 +140,7 @@ gfx::AcceleratedWidget OzoneDisplay::RealizeAcceleratedWidget(
   // Event Converter should be already initialized unless we are in gpu process
   // side.
   if (!event_converter_) {
-    event_converter_ = new RemoteEventDispatcher();
+    event_converter_ = new ozoneui::RemoteEventDispatcher();
     display_->StartProcessingEvents();
   }
 

@@ -16,7 +16,7 @@ namespace IPC {
 class Message;
 }
 
-namespace ozonewayland {
+namespace ozoneui {
 
 // RemoteStateChangeHandler implements WindowStateChangeHandler and
 // IMEStateChangeHandler. It is responsible for sending any Ime/Window state
@@ -51,6 +51,6 @@ class RemoteStateChangeHandler : public WindowStateChangeHandler,
   DISALLOW_COPY_AND_ASSIGN(RemoteStateChangeHandler);
 };
 
-}  // namespace ozonewayland
+}  // namespace ozoneui
 
 #endif  // OZONE_UI_EVENTS_REMOTE_STATE_CHANGE_HANDLER_H_

@@ -9,7 +9,7 @@
 #include "ui/base/ime/linux/linux_input_method_context.h"
 #include "ui/gfx/rect.h"
 
-namespace ozonewayland {
+namespace ozoneui {
 
 // An implementation of LinuxInputMethodContext for IME support on Ozone
 // platform using Wayland.
@@ -33,6 +33,6 @@ class OZONE_WAYLAND_EXPORT InputMethodContextImplWayland
   DISALLOW_COPY_AND_ASSIGN(InputMethodContextImplWayland);
 };
 
-}  // namespace ozonewayland
+}  // namespace ozoneui
 
 #endif  // OZONE_UI_IME_INPUT_METHOD_CONTEXT_IMPL_WAYLAND_H_

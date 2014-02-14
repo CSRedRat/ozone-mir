@@ -16,16 +16,16 @@ namespace ozoneui
 {
 class Display;
 class Window;
+class EventConverterOzoneWayland;
 }
 
 namespace ozonewayland {
 
 class DesktopScreenWayland;
-class EventConverterOzoneWayland;
 class OzoneDisplayChannel;
 class OzoneDisplayChannelHost;
 
-class OzoneDisplay : public OutputChangeObserver {
+class OzoneDisplay : public ozoneui::OutputChangeObserver {
  public:
   static OzoneDisplay* GetInstance();
 
@@ -57,7 +57,7 @@ class OzoneDisplay : public OutputChangeObserver {
   ozoneui::Display* display_;
   OzoneDisplayChannel* channel_;
   OzoneDisplayChannelHost* host_;
-  EventConverterOzoneWayland* event_converter_;
+  ozoneui::EventConverterOzoneWayland* event_converter_;
   char* spec_;
   static OzoneDisplay* instance_;
   DISALLOW_COPY_AND_ASSIGN(OzoneDisplay);

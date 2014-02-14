@@ -9,7 +9,7 @@
 #include "base/strings/stringprintf.h"
 #include "ui/events/event_constants.h"
 
-namespace ozonewayland {
+namespace ozoneui {
 
 ui::KeyboardCode KeyboardCodeFromNativeKeysym(unsigned keysym) {
   if (keysym >= OZONECHARCODE_a && keysym <= OZONECHARCODE_z) {
@@ -111,4 +111,4 @@ uint16 CharacterCodeFromNativeKeySym(unsigned sym, unsigned flags) {
   return sym;
 }
 
-}  // namespace ozonewayland
+}  // namespace ozoneui

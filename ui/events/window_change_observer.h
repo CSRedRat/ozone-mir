@@ -5,7 +5,7 @@
 #ifndef OZONE_UI_EVENTS_WINDOW_CHANGE_OBSERVER_H_
 #define OZONE_UI_EVENTS_WINDOW_CHANGE_OBSERVER_H_
 
-namespace ozonewayland {
+namespace ozoneui {
 
 // A simple observer interface for all clients interested in recieving various
 // window state change notifications like when the pointer enters a
@@ -30,6 +30,6 @@ class WindowChangeObserver {
   virtual ~WindowChangeObserver() {}
 };
 
-}  // namespace ozonewayland
+}  // namespace ozoneui
 
 #endif  // OZONE_UI_EVENTS_WINDOW_CHANGE_OBSERVER_H_

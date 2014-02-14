@@ -31,7 +31,7 @@ class OzoneDisplay;
 // MirDisplay is a wrapper around wl_display. Once we get a valid
 // wl_display, the Mir server will send different events to register
 // the Mir compositor, shell, screens, input devices, ...
-class MirDisplay : public ozoneui::Display, public ozonewayland::WindowStateChangeHandler {
+class MirDisplay : public ozoneui::Display, public ozoneui::WindowStateChangeHandler {
 public:
     MirDisplay(bool gpu_process = true);
     virtual ~MirDisplay();
@@ -55,12 +55,12 @@ public:
     void FlushDisplay() { /* TODO: May not be necessary for mir ~racarr */ }
     
     // Window state change handler interface.
-    void SetWidgetState(unsigned widget, ozonewayland::WidgetState state,
+    void SetWidgetState(unsigned widget, ozoneui::WidgetState state,
                         unsigned width, unsigned height);
     void SetWidgetTitle(unsigned widget, const base::string16& title);
     void SetWidgetAttributes(unsigned widget, unsigned parent,
                              unsigned x, unsigned y,
-                             ozonewayland::WidgetType type);
+                             ozoneui::WidgetType type);
 
 
 protected:

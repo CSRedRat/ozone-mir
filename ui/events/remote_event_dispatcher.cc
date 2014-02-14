@@ -19,7 +19,7 @@ content::ChildThread* GetProcessMainThread() {
 
 }
 
-namespace ozonewayland {
+namespace ozoneui {
 
 RemoteEventDispatcher::RemoteEventDispatcher()
     : EventConverterOzoneWayland() {
@@ -160,4 +160,4 @@ void RemoteEventDispatcher::Send(IPC::Message* message) {
   thread->Send(message);
 }
 
-}  // namespace ozonewayland
+}  // namespace ozoneui

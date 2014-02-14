@@ -8,7 +8,7 @@
 #include "ozone/platform/ozone_export_wayland.h"
 #include "ui/ozone/ime/input_method_context_factory_ozone.h"
 
-namespace ozonewayland {
+namespace ozoneui {
 
 class OZONE_WAYLAND_EXPORT InputMethodContextFactoryWayland
     : public ui::InputMethodContextFactoryOzone  {
@@ -20,6 +20,6 @@ class OZONE_WAYLAND_EXPORT InputMethodContextFactoryWayland
       ui::LinuxInputMethodContextDelegate* delegate) const OVERRIDE;
 };
 
-}  // namespace ozonewayland
+}  // namespace ozoneui
 
 #endif  // OZONE_UI_IME_INPUT_METHOD_CONTEXT_FACTORY_OZONE_H_

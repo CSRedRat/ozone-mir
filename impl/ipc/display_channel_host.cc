@@ -15,7 +15,7 @@
 namespace ozonewayland {
 
 OzoneDisplayChannelHost::OzoneDisplayChannelHost()
-    : dispatcher_(EventConverterOzoneWayland::GetInstance()),
+    : dispatcher_(ozoneui::EventConverterOzoneWayland::GetInstance()),
       state_handler_(NULL) {
   BrowserChildProcessObserver::Add(this);
   EstablishChannel();
@@ -128,7 +128,7 @@ void OzoneDisplayChannelHost::EstablishChannel() {
   if (state_handler_)
     return;
 
-  state_handler_ = new RemoteStateChangeHandler();
+  state_handler_ = new ozoneui::RemoteStateChangeHandler();
   content::BrowserThread::PostTask(content::BrowserThread::IO, FROM_HERE,
       base::Bind(&OzoneDisplayChannelHost::UpdateConnection,
           base::Unretained(this)));

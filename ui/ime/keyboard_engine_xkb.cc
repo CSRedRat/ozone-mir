@@ -9,7 +9,7 @@
 #include "ozone/ui/events/keyboard_codes_ozone.h"
 #include "ui/events/event.h"
 
-namespace ozonewayland {
+namespace ozoneui {
 
 KeyboardEngineXKB::KeyboardEngineXKB() : keyboard_modifiers_(0),
     mods_depressed_(0),
@@ -427,4 +427,4 @@ xkb_keysym_t KeyboardEngineXKB::NormalizeKey(xkb_keysym_t keysym) {
   }
 }
 
-}  // namespace ozonewayland
+}  // namespace ozoneui

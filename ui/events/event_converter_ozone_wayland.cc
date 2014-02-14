@@ -6,7 +6,7 @@
 
 #include "base/bind.h"
 
-namespace ozonewayland {
+namespace ozoneui {
 
 // static
 EventConverterOzoneWayland* EventConverterOzoneWayland::impl_ = NULL;
@@ -43,4 +43,4 @@ void EventConverterOzoneWayland::PostTaskOnMainLoop(const base::Closure& task) {
   loop_->message_loop_proxy()->PostTask(FROM_HERE, task);
 }
 
-}  // namespace ozonewayland
+}  // namespace ozoneui

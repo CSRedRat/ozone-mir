@@ -11,7 +11,7 @@
 #include "content/public/common/process_type.h"
 #include "ozone/impl/ipc/messages.h"
 
-namespace ozonewayland {
+namespace ozoneui {
 
 // This should be same as defined in display_channel.
 const int CHANNEL_ROUTE_ID = -0x1;
@@ -119,4 +119,4 @@ void RemoteStateChangeHandler::EstablishChannel() {
   DCHECK(!iterator_->Done());
 }
 
-}  // namespace ozonewayland
+}  // namespace ozoneui

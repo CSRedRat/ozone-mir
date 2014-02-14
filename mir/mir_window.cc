@@ -164,7 +164,7 @@ void om::MirWindow::HandleEvent(MirSurface *surface, MirEvent const *ev, void *c
   if (w->processing_events_ == false)
     return;
   // TODO: Ugly ~racarr
-  ozonewayland::EventConverterOzoneWayland  *sink = ozonewayland::EventConverterOzoneWayland::GetInstance();
+  ozoneui::EventConverterOzoneWayland  *sink = ozoneui::EventConverterOzoneWayland::GetInstance();
 
   switch(ev->type)
   {
@@ -206,7 +206,7 @@ void om::MirWindow::HandleEvent(MirSurface *surface, MirEvent const *ev, void *c
     MirKeyEvent const& kev = ev->key;
     // TODO: Translate modifiers ~racarr
     ui::EventType type = kev.action == mir_key_action_down ? ui::ET_KEY_PRESSED : ui::ET_KEY_RELEASED;
-    sink->KeyNotify(type, ozonewayland::KeyboardEngineXKB::NormalizeKey(static_cast<xkb_keysym_t>(ev->key.key_code)), 
+    sink->KeyNotify(type, ozoneui::KeyboardEngineXKB::NormalizeKey(static_cast<xkb_keysym_t>(ev->key.key_code)), 
                     TranslateMirModifiers(ev->key.modifiers));
   }
   break;
@@ -218,7 +218,7 @@ void om::MirWindow::HandleEvent(MirSurface *surface, MirEvent const *ev, void *c
 void om::MirWindow::NotifyResize() {
   MirSurfaceParameters params;
   mir_surface_get_parameters(surface_, &params);
-  ozonewayland::EventConverterOzoneWayland  *sink = ozonewayland::EventConverterOzoneWayland::GetInstance();
+  ozoneui::EventConverterOzoneWayland  *sink = ozoneui::EventConverterOzoneWayland::GetInstance();
 
   DCHECK(sink);
 

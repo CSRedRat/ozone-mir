@@ -36,14 +36,14 @@ om::MirDisplay::MirDisplay(bool gpu_process)
   : processing_events_(false) {
 
   if (gpu_process)
-    ozonewayland::WindowStateChangeHandler::SetInstance(this);
+    ozoneui::WindowStateChangeHandler::SetInstance(this);
   connection_ = mir_connect_sync(NULL, "Chromium-Ozone");
   
   UpdateScreenList();
 }
 
 om::MirDisplay::~MirDisplay() {
-  ozonewayland::WindowStateChangeHandler::SetInstance(0);
+  ozoneui::WindowStateChangeHandler::SetInstance(0);
 
   mir_connection_release(connection_);
   
@@ -188,60 +188,60 @@ void om::MirDisplay::OnDisplayConfigurationChanged(MirConnection *connection, vo
     disp->UpdateScreenList();
 }
 
-void om::MirDisplay::SetWidgetState(unsigned w, ozonewayland::WidgetState state,
+void om::MirDisplay::SetWidgetState(unsigned w, ozoneui::WidgetState state,
                                     unsigned width, unsigned height) {
   switch (state) {
-    case ozonewayland::CREATE:
+    case ozoneui::CREATE:
     {
       CreateAcceleratedSurface(w);
       break;
     }
-    case ozonewayland::FULLSCREEN:
+    case ozoneui::FULLSCREEN:
     {
       om::MirWindow* widget = GetWindow(w);
       widget->SetFullscreen();
       widget->Resize(width, height);
       break;
     }
-    case ozonewayland::MAXIMIZED:
+    case ozoneui::MAXIMIZED:
     {
       om::MirWindow* widget = GetWindow(w);
       widget->Maximize();
       break;
     }
-    case ozonewayland::MINIMIZED:
+    case ozoneui::MINIMIZED:
     {
       om::MirWindow* widget = GetWindow(w);
       widget->Minimize();
       break;
     }
-    case ozonewayland::RESTORE:
+    case ozoneui::RESTORE:
     {
       om::MirWindow* widget = GetWindow(w);
       widget->Restore();
       widget->Resize(width, height);
       break;
     }
-    case ozonewayland::ACTIVE:
+    case ozoneui::ACTIVE:
       NOTIMPLEMENTED();
       break;
-    case ozonewayland::INACTIVE:
+    case ozoneui::INACTIVE:
       NOTIMPLEMENTED();
       break;
-    case ozonewayland::SHOW:
+    case ozoneui::SHOW:
       NOTIMPLEMENTED();
       break;
-    case ozonewayland::HIDE:
+    case ozoneui::HIDE:
       NOTIMPLEMENTED();
       break;
-    case ozonewayland::RESIZE:
+    case ozoneui::RESIZE:
     {
       om::MirWindow* window = GetWindow(w);
       DCHECK(window);
       window->Resize(width, height);
       break;
     }
-    case ozonewayland::DESTROYED:
+    case ozoneui::DESTROYED:
     {
       DestroyWindow(w);
       if (window_map_.empty())
@@ -262,7 +262,7 @@ void om::MirDisplay::SetWidgetTitle(unsigned widget, const base::string16& title
 
 void om::MirDisplay::SetWidgetAttributes(unsigned widget, unsigned parent,
                                          unsigned x, unsigned y,
-                                         ozonewayland::WidgetType type) {
+                                         ozoneui::WidgetType type) {
   om::MirWindow* window = GetWindow(widget);
   // TODO:  om::MirWindow* parent_window = GetWindow(parent);
   DCHECK(window);

@@ -10,10 +10,13 @@
 #include "content/public/browser/child_process_data.h"
 #include "ui/events/event_constants.h"
 
-namespace ozonewayland {
-
+namespace ozoneui
+{
 class EventConverterOzoneWayland;
 class RemoteStateChangeHandler;
+}
+
+namespace ozonewayland {
 
 // OzoneDisplayChannelHost is responsible for listening to any relevant messages
 // sent from gpu process(i.e dispatcher and OzoneDisplayChannel). There will
@@ -53,8 +56,8 @@ class OzoneDisplayChannelHost : public content::BrowserChildProcessObserver {
   void OnMessageReceived(const IPC::Message& message);
   void EstablishChannel();
   void UpdateConnection();
-  EventConverterOzoneWayland* dispatcher_;
-  RemoteStateChangeHandler* state_handler_;
+  ozoneui::EventConverterOzoneWayland* dispatcher_;
+  ozoneui::RemoteStateChangeHandler* state_handler_;
   DISALLOW_COPY_AND_ASSIGN(OzoneDisplayChannelHost);
 };
 

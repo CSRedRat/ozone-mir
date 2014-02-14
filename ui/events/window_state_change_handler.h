@@ -9,7 +9,7 @@
 #include "base/strings/string16.h"
 #include "ozone/ui/events/window_constants.h"
 
-namespace ozonewayland {
+namespace ozoneui {
 
 // A simple interface for passing Window state change notifications coming from
 // Aura to Wayland.
@@ -44,6 +44,6 @@ class WindowStateChangeHandler {
   static WindowStateChangeHandler* impl_;  // not owned
 };
 
-}  // namespace ozonewayland
+}  // namespace ozoneui
 
 #endif  // OZONE_UI_EVENTS_WINDOW_STATE_CHANGE_HANDLER_H_

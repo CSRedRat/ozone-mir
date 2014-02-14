@@ -8,7 +8,7 @@
 #include "base/basictypes.h"
 #include "ui/gfx/rect.h"
 
-namespace ozonewayland {
+namespace ozoneui {
 
 // A simple interface for passing IME state change notifications coming from
 // Aura to Wayland.
@@ -34,6 +34,6 @@ class IMEStateChangeHandler {
   static IMEStateChangeHandler* impl_;  // not owned
 };
 
-}  // namespace ozonewayland
+}  // namespace ozoneui
 
 #endif  // OZONE_UI_IME_IME_STATE_CHANGE_HANDLER_H_

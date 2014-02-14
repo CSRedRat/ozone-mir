@@ -7,7 +7,7 @@
 #include "base/logging.h"
 #include "ozone/ui/ime/ime_state_change_handler.h"
 
-namespace ozonewayland {
+namespace ozoneui {
 
 InputMethodContextImplWayland::InputMethodContextImplWayland(
     ui::LinuxInputMethodContextDelegate* delegate)
@@ -39,4 +39,4 @@ void InputMethodContextImplWayland::OnCaretBoundsChanged(
   IMEStateChangeHandler::GetInstance()->ImeCaretBoundsChanged(caret_bounds);
 }
 
-}  // namespace ozonewayland
+}  // namespace ozoneui

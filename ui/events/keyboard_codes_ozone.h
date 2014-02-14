@@ -7,7 +7,7 @@
 
 #include "ui/events/keycodes/keyboard_codes_posix.h"
 
-namespace ozonewayland {
+namespace ozoneui {
 
 // This is unfiy the keycodes used in Chromium and XKB/any backend used in
 // Ozone-Wayland.
@@ -404,6 +404,6 @@ enum KeyboardCode {
   OZONEACTIONKEY_OEM_CLEAR = OZONEACTIONKEY_START + ui::VKEY_OEM_CLEAR
 };
 
-}  // namespace ozonewayland
+}  // namespace ozoneui
 
 #endif  // OZONE_UI_EVENTS_KEYBOARD_CODES_OZONE_H_

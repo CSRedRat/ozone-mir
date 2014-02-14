@@ -96,16 +96,16 @@ void WaylandShellSurface::HandleConfigure(void *data,
                                           int32_t width,
                                           int32_t height) {
   WaylandWindow *window = static_cast<WaylandWindow*>(data);
-  EventConverterOzoneWayland* dispatcher =
-      EventConverterOzoneWayland::GetInstance();
+  ozoneui::EventConverterOzoneWayland* dispatcher =
+    ozoneui::EventConverterOzoneWayland::GetInstance();
   dispatcher->WindowResized(window->Handle(), width, height);
 }
 
 void WaylandShellSurface::HandlePopupDone(void *data,
                                           struct wl_shell_surface *surface) {
   WaylandInputDevice* input = WaylandDisplay::GetInstance()->PrimaryInput();
-  EventConverterOzoneWayland* dispatcher =
-      EventConverterOzoneWayland::GetInstance();
+  ozoneui::EventConverterOzoneWayland* dispatcher =
+      ozoneui::EventConverterOzoneWayland::GetInstance();
 
   if (!input->GetGrabWindowHandle())
     return;

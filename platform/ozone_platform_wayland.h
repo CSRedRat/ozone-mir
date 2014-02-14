@@ -35,7 +35,7 @@ class OzonePlatformWayland : public OzonePlatform {
   // TODO(kalyan): Use EventFactoryOzone. This is a stub that does nothing.
   ui::EventFactoryOzone event_factory_ozone_;
 
-  ozonewayland::InputMethodContextFactoryWayland input_method_context_factory_;
+  ozoneui::InputMethodContextFactoryWayland input_method_context_factory_;
 
 #if defined(TOOLKIT_VIEWS) && !defined(OS_CHROMEOS)
   ozonewayland::DesktopFactoryWayland desktop_factory_ozone_;

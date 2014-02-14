@@ -9,7 +9,7 @@
 
 #include "base/basictypes.h"
 
-namespace ozonewayland {
+namespace ozoneui {
 
 class KeyboardEngineXKB {
  public:
@@ -52,6 +52,6 @@ class KeyboardEngineXKB {
   DISALLOW_COPY_AND_ASSIGN(KeyboardEngineXKB);
 };
 
-}  // namespace ozonewayland
+}  // namespace ozoneui
 
 #endif  // OZONE_UI_IME_KEYBOARD_ENGINE_XKB_H_

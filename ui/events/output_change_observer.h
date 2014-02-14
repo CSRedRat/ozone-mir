@@ -5,7 +5,7 @@
 #ifndef OZONE_UI_EVENTS_OUTPUT_CHANGE_OBSERVER_H_
 #define OZONE_UI_EVENTS_OUTPUT_CHANGE_OBSERVER_H_
 
-namespace ozonewayland {
+namespace ozoneui {
 
 // A simple observer interface for all clients interested in receiving various
 // output change notifications like size changes, when a new output is added,
@@ -19,6 +19,6 @@ class OutputChangeObserver {
   virtual ~OutputChangeObserver() {}
 };
 
-}  // namespace ozonewayland
+}  // namespace ozoneui
 
 #endif  // OZONE_UI_EVENTS_OUPUT_CHANGE_OBSERVER_H_

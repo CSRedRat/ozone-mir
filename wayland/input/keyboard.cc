@@ -30,11 +30,11 @@ void WaylandKeyboard::OnSeatCapabilities(wl_seat *seat, uint32_t caps) {
     WaylandKeyboard::OnKeyModifiers,
   };
 
-  dispatcher_ = EventConverterOzoneWayland::GetInstance();
+  dispatcher_ = ozoneui::EventConverterOzoneWayland::GetInstance();
 
   if ((caps & WL_SEAT_CAPABILITY_KEYBOARD) && !input_keyboard_) {
     DCHECK(!backend_);
-    backend_ =  new KeyboardEngineXKB();
+    backend_ =  new ozoneui::KeyboardEngineXKB();
     input_keyboard_ = wl_seat_get_keyboard(seat);
     wl_keyboard_add_listener(input_keyboard_, &kInputKeyboardListener,
         this);

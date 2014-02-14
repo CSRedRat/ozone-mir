@@ -6,8 +6,8 @@
   'sources': [
     'event_converter_in_process.h',
     'event_converter_in_process.cc',
-    'event_converter_ozone_wayland.h',
-    'event_converter_ozone_wayland.cc',
+    'event_converter_ozone.h',
+    'event_converter_ozone.cc',
     'keyboard_codes_ozone.h',
     'keyboard_code_conversion_ozone.h',
     'keyboard_code_conversion_ozone.cc',

@@ -8,9 +8,12 @@
 #include "ozone/wayland/display.h"
 #include "ui/gfx/point.h"
 
+namespace ozoneui {
+class EventConverterOzoneWayland;
+}
+
 namespace ozonewayland {
 
-class EventConverterOzoneWayland;
 class WaylandCursor;
 class WaylandWindow;
 
@@ -60,7 +63,7 @@ class WaylandPointer {
       wl_surface* surface);
 
   WaylandCursor* cursor_;
-  EventConverterOzoneWayland* dispatcher_;
+  ozoneui::EventConverterOzoneWayland* dispatcher_;
   // Keeps track of the last position for the motion event. We want to
   // dispatch this with events such as wheel or button which don't have a
   // position associated on Wayland.
@@ -68,6 +71,7 @@ class WaylandPointer {
 
   DISALLOW_COPY_AND_ASSIGN(WaylandPointer);
 };
+
 
 }  // namespace ozonewayland
 

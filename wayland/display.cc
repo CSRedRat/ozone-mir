@@ -101,61 +101,61 @@ void WaylandDisplay::SyncDisplay() {
 }
 
 void WaylandDisplay::SetWidgetState(unsigned w,
-                                    WidgetState state,
+                                    ozoneui::WidgetState state,
                                     unsigned width,
                                     unsigned height) {
   switch (state) {
-    case CREATE:
+    case ozoneui::CREATE:
     {
       CreateAcceleratedSurface(w);
       break;
     }
-    case FULLSCREEN:
+    case ozoneui::FULLSCREEN:
     {
       WaylandWindow* widget = GetWidget(w);
       widget->SetFullscreen();
       widget->Resize(width, height);
       break;
     }
-    case MAXIMIZED:
+    case ozoneui::MAXIMIZED:
     {
       WaylandWindow* widget = GetWidget(w);
       widget->Maximize();
       break;
     }
-    case MINIMIZED:
+    case ozoneui::MINIMIZED:
     {
       WaylandWindow* widget = GetWidget(w);
       widget->Minimize();
       break;
     }
-    case RESTORE:
+    case ozoneui::RESTORE:
     {
       WaylandWindow* widget = GetWidget(w);
       widget->Restore();
       widget->Resize(width, height);
       break;
     }
-    case ACTIVE:
+    case ozoneui::ACTIVE:
       NOTIMPLEMENTED();
       break;
-    case INACTIVE:
+    case ozoneui::INACTIVE:
       NOTIMPLEMENTED();
       break;
-    case SHOW:
+    case ozoneui::SHOW:
       NOTIMPLEMENTED();
       break;
-    case HIDE:
+    case ozoneui::HIDE:
       NOTIMPLEMENTED();
       break;
-    case RESIZE:
+    case ozoneui::RESIZE:
     {
       WaylandWindow* window = GetWidget(w);
       DCHECK(window);
       window->Resize(width, height);
       break;
     }
-    case DESTROYED:
+    case ozoneui::DESTROYED:
     {
       DestroyWindow(w);
       if (widget_map_.empty())
@@ -178,18 +178,18 @@ void WaylandDisplay::SetWidgetAttributes(unsigned widget,
                                          unsigned parent,
                                          unsigned x,
                                          unsigned y,
-                                         WidgetType type) {
+                                         ozoneui::WidgetType type) {
   WaylandWindow* window = GetWidget(widget);
   WaylandWindow* parent_window = GetWidget(parent);
   DCHECK(window);
   switch (type) {
-  case WINDOW:
+  case ozoneui::WINDOW:
     window->SetShellAttributes(WaylandWindow::TOPLEVEL);
     break;
-  case WINDOWFRAMELESS:
+  case ozoneui::WINDOWFRAMELESS:
     NOTIMPLEMENTED();
     break;
-  case POPUP:
+  case ozoneui::POPUP:
     DCHECK(parent_window);
     window->SetShellAttributes(WaylandWindow::POPUP,
                                parent_window->GetShellSurface(),

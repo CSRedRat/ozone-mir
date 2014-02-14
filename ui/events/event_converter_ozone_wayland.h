@@ -8,7 +8,7 @@
 #include "base/message_loop/message_loop.h"
 #include "ui/events/event_constants.h"
 
-namespace ozonewayland {
+namespace ozoneui {
 
 class WindowChangeObserver;
 class OutputChangeObserver;
@@ -59,6 +59,6 @@ class EventConverterOzoneWayland {
   static EventConverterOzoneWayland* impl_;  // not owned
 };
 
-}  // namespace ozonewayland
+}  // namespace ozoneui
 
 #endif  // OZONE_UI_EVENTS_EVENT_CONVERTER_OZONE_WAYLAND_H_
