@@ -2,7 +2,7 @@
 
 Ozone-Mir is an implementation of Chromiums Ozone layer for the Mir Windowing system. Ozone Mir allows the Chromium browser and other projects based off of Chromium to run within a Mir session.
 
-You can read a little about the history and design of Ozone Mir here: LINKTOG+Post
+You can read a little about the history and design of Ozone Mir here: https://plus.google.com/104358235952874475094/posts/cPmZofCRSA3
 
 # Building Ozone Mir
 
