@@ -12,7 +12,7 @@
         '<(DEPTH)/skia/skia.gyp:skia',
         '<(DEPTH)/base/third_party/dynamic_annotations/dynamic_annotations.gyp:dynamic_annotations',
       ],
-      'variables': { 'use_ozone_mir%' : 0, 'use_ozone_wayland%' : 1},
+      'variables': { 'use_ozone_mir%' : 1, 'use_ozone_wayland%' : 0},
       'conditions': [
         ['use_ozone_mir==1', {            
           'dependencies': [ 'mir/mir.gyp:mir_toolkit'
